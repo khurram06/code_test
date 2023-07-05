@@ -227,7 +227,11 @@ class UserRepository extends BaseRepository
 
     }
 
-    public function getTranslators()
+    /**
+     * return users list that type is 2
+     * @return User
+     */
+    public function getTranslators() : User
     {
         return User::where('user_type', 2)->get();
     }

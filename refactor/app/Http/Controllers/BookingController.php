@@ -40,7 +40,7 @@ class BookingController extends Controller
             $response = $this->repository->getUsersJobs($user_id);
 
         }
-        elseif($request->__authenticatedUser->user_type == env('ADMIN_ROLE_ID') || $request->__authenticatedUser->user_type == env('SUPERADMIN_ROLE_ID'))
+        elseif($request->__authenticatedUser->user_type == config('project.admin_role_id') || $request->__authenticatedUser->user_type == env('SUPERADMIN_ROLE_ID'))
         {
             $response = $this->repository->getAll($request);
         }
@@ -254,7 +254,9 @@ class BookingController extends Controller
         return response('Record updated!');
     }
 
-    public function reopen(Request $request)
+    // the namespace is not properly follow for function naming convention
+    // reOpen
+    public function reOpen(Request $request)
     {
         $data = $request->all();
         $response = $this->repository->reopen($data);

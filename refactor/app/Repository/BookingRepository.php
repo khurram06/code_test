@@ -1686,7 +1686,7 @@ class BookingRepository extends BaseRepository
         $cuser = $request->__authenticatedUser;
         $consumer_type = $cuser->consumer_type;
 
-        if ($cuser && $cuser->user_type == env('SUPERADMIN_ROLE_ID')) {
+        if ($cuser && $cuser->user_type == config('project.super_admin_role_id')) {
             $allJobs = Job::query();
 
             if (isset($requestdata['feedback']) && $requestdata['feedback'] != 'false') {
@@ -1756,10 +1756,11 @@ class BookingRepository extends BaseRepository
                 /*$allJobs->where('jobs.job_type', '=', $requestdata['job_type']);*/
             }
 
-            if (isset($requestdata['physical'])) {
-                $allJobs->where('customer_physical_type', $requestdata['physical']);
-                $allJobs->where('ignore_physical', 0);
-            }
+            // change the code with builder functions
+            $allJobs->when(isset($requestdata['physical']), function($query) use ( $requestdata ){
+                $query->where('customer_physical_type', $requestdata['physical'])
+                ->where('ignore_physical', 0);
+            });
 
             if (isset($requestdata['phone'])) {
                 $allJobs->where('customer_phone_type', $requestdata['phone']);
